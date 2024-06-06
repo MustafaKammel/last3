@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "338422811844",
+    "project_id": "rolebased-c7777",
+    "storage_bucket": "rolebased-c7777.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338422811844:android:8731ede4939ac395154d91",
+        "android_client_info": {
+          "package_name": "com.example.auth_with_2types"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB--QIvHhfllgcc7brP40zvP_BmhBLCwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338422811844:android:d6d12dfcc2a745f4154d91",
+        "android_client_info": {
+          "package_name": "com.example.graduateproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB--QIvHhfllgcc7brP40zvP_BmhBLCwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
