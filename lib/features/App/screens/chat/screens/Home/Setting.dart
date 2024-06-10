@@ -41,8 +41,8 @@ class _SettingHomeScreenState extends State<SettingHomeScreen> {
             children: [
               ListTile(
                 minVerticalPadding: 40,
-                leading: CircleAvatar(radius: 30),
-                title: Text(prov.me!.name.toString()),
+                // leading: CircleAvatar(radius: 30),
+                title: Text("\t\t"+prov.me!.name.toString()),
                 trailing: IconButton(
                   onPressed: () {
                     Navigator.push(

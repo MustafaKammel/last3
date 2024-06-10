@@ -16,10 +16,10 @@ class BookAppointmentView extends StatefulWidget {
 
   const BookAppointmentView(
       {super.key,
-      required this.docName,
-      required this.docId,
-      required this.amount,
-      required this.Services});
+        required this.docName,
+        required this.docId,
+        required this.amount,
+        required this.Services});
 
   @override
   State<BookAppointmentView> createState() => _BookAppointmentViewState();
@@ -64,73 +64,53 @@ class _BookAppointmentViewState extends State<BookAppointmentView> {
         .then((value) {
       setState(() {
         days = value.data()!['availableDays'].cast<String>();
+        numbers = days.map((day) {
+          switch (day) {
+            case 'Sunday':
+              return 7;
+            case 'Monday':
+              return 1;
+            case 'Tuesday':
+              return 2;
+            case 'Wednesday':
+              return 3;
+            case 'Thursday':
+              return 4;
+            case 'Friday':
+              return 5;
+            case 'Saturday':
+              return 6;
+            default:
+              return 0;
+          }
+        }).toList();
+
+        daysInt = List<int>.generate(7, (index) => index + 1)
+            .where((day) => !numbers!.contains(day))
+            .toList();
       });
-    }).then((value) {
-      numbers = List<int>.filled(days.length, 0);
-      for (int i = 0; i < days.length; i++) {
-        if (days[i] == 'Sunday') {
-          numbers![i] = 7;
-        }
-        if (days[i] == 'Monday') {
-          numbers![i] = 1;
-        }
-        if (days[i] == 'Tuesday') {
-          numbers![i] = 2;
-        }
-        if (days[i] == 'Wednesday') {
-          numbers![i] = 3;
-        }
-        if (days[i] == 'Thursday') {
-          numbers![i] = 4;
-        }
-        if (days[i] == 'Friday') {
-          numbers![i] = 5;
-        }
-        if (days[i] == 'Saturday') {
-          numbers![i] = 6;
-        }
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        UserId = FirebaseAuth.instance.currentUser!.uid;
+        UserEmail = FirebaseAuth.instance.currentUser!.email;
+        UserPhonenumber = FirebaseAuth.instance.currentUser!.phoneNumber;
       }
-
-      print(numbers.toString() + "hhhhhhhhhhhhhhhhh");
-
-      daysInt = List<int>.filled(7 - days.length, 0);
-      int count = 0;
-      for (int i = 0; i < 7; i++) {
-        if (numbers!.contains(i)) {
-        } else {
-          setState(() {
-            daysInt![count] = i;
-            count++;
-          });
-        }
-      }
-    });
-
-    if (FirebaseAuth.instance.currentUser != null) {
-      UserId = FirebaseAuth.instance.currentUser!.uid;
-      UserEmail = FirebaseAuth.instance.currentUser!.email;
-      UserPhonenumber = FirebaseAuth.instance.currentUser!.phoneNumber;
-    }
-
-    FirebaseFirestore.instance
-        .collection('appointments')
-        .where('serviceId', isEqualTo: widget.docId)
-        .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        var end = DateTime.parse(element.data()['bookingEnd']);
-        var start = DateTime.parse(element.data()['bookingStart']);
-        converted.add(DateTimeRange(
-          end: end,
-          start: start,
-        ));
-      });
     });
   }
 
-  Stream<dynamic>? getBookingStreamMock(
+  Stream<List<DateTimeRange>> getBookingStreamMock(
       {required DateTime end, required DateTime start}) {
-    return Stream.value([]);
+    return FirebaseFirestore.instance
+        .collection('appointments')
+        .where('serviceId', isEqualTo: widget.docId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+      var data = doc.data();
+      return DateTimeRange(
+        start: DateTime.parse(data['bookingStart']),
+        end: DateTime.parse(data['bookingEnd']),
+      );
+    }).toList());
   }
 
   Future<dynamic> uploadBookingMock(
@@ -150,8 +130,6 @@ class _BookAppointmentViewState extends State<BookAppointmentView> {
     try {
       await PaymentManager.makePayment(widget.amount, "egp");
       await Future.delayed(const Duration(seconds: 1));
-      converted.add(DateTimeRange(
-          start: newBooking.bookingStart, end: newBooking.bookingEnd));
       print(newBooking.bookingEnd.toString() +
           '+++++++....' +
           newBooking.bookingStart.toString());
@@ -161,14 +139,14 @@ class _BookAppointmentViewState extends State<BookAppointmentView> {
           .collection('appointments')
           .add(book.toJson())
           .then((value) =>
-              FirebaseFirestore.instance.collection('notifications').add({
-                'uid': widget.docId,
-                'title': 'HealHive',
-                'body':
-                    'someone has been make appointment with you,check your schedules!',
-                'Date': DateTime.now().toString(),
-                'isShow': false,
-              }));
+          FirebaseFirestore.instance.collection('notifications').add({
+            'uid': widget.docId,
+            'title': 'HealHive',
+            'body':
+            'someone has been make appointment with you,check your schedules!',
+            'Date': DateTime.now().toString(),
+            'isShow': false,
+          }));
 
       // عرض SnackBar بعد إضافة الحجز بنجاح
       ScaffoldMessenger.of(context).showSnackBar(
@@ -183,10 +161,8 @@ class _BookAppointmentViewState extends State<BookAppointmentView> {
     }
   }
 
-  List<DateTimeRange> converted = [];
-
   List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
-    return converted;
+    return streamResult;
   }
 
   @override
@@ -194,7 +170,6 @@ class _BookAppointmentViewState extends State<BookAppointmentView> {
     print(daysInt.toString() + "build context");
     var controller = Get.put(AppointmnetController());
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       appBar: AppBarWidget(
         showBackArrow: true,
@@ -215,46 +190,66 @@ class _BookAppointmentViewState extends State<BookAppointmentView> {
             } else if (snapshot.hasData && snapshot.data.docs.isNotEmpty) {
               timefromto(snapshot.data.docs[0]['docTimingto'],
                   snapshot.data.docs[0]['docTimingfrom']);
-            } else {
-              return const Text('No data available');
-            }
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: double.infinity,
-                width: double.infinity,
-                child: BookingCalendar(
-                  availableSlotColor: isDarkMode
-                      ? Colors.lightBlue[800]
-                      : Colors.lightBlue[300],
-                  bookingButtonColor:
-                      isDarkMode ? Colors.blue[800] : Colors.blue,
-                  selectedSlotColor:
-                      isDarkMode ? Colors.amber[800] : Colors.amber,
-                  bookingService: BookingService(
-                      serviceName: 'Mock Service',
-                      serviceDuration: 15,
-                      bookingEnd: DateTime(
-                          now.year, now.month, now.day, tohour ?? 0, 0),
-                      bookingStart: DateTime(
-                          now.year, now.month, now.day, fromhour ?? 0, 0)),
-                  convertStreamResultToDateTimeRanges: convertStreamResultMock,
-                  getBookingStream: getBookingStreamMock,
-                  uploadBooking: uploadBookingMock,
-                  pauseSlots: generatePauseSlots(),
-                  pauseSlotText: 'LUNCH',
-                  hideBreakTime: false,
-                  loadingWidget: const Text('Fetching data...'),
-                  uploadingWidget:
-                      const Center(child: CircularProgressIndicator.adaptive()),
-                  locale: 'en',
-                  startingDayOfWeek: StartingDayOfWeek.saturday,
-                  wholeDayIsBookedWidget:
-                      const Text('Sorry, for this day everything is booked'),
-                  disabledDays: numbers ?? [],
+              return StreamBuilder<List<DateTimeRange>>(
+                stream: getBookingStreamMock(
+                  end: DateTime(now.year, now.month, now.day, tohour ?? 0, 0),
+                  start:
+                  DateTime(now.year, now.month, now.day, fromhour ?? 0, 0),
                 ),
-              ),
-            );
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData) {
+                    return Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: BookingCalendar(
+                          availableSlotColor: isDarkMode
+                              ? Colors.lightBlue[800]
+                              : Colors.lightBlue[300],
+                          bookingButtonColor:
+                          isDarkMode ? Colors.blue[800] : Colors.blue,
+                          selectedSlotColor:
+                          isDarkMode ? Colors.amber[800] : Colors.amber,
+                          bookingService: BookingService(
+                              serviceName: 'Mock Service',
+                              serviceDuration: 15,
+                              bookingEnd: DateTime(now.year, now.month, now.day,
+                                  tohour ?? 0, 0),
+                              bookingStart: DateTime(now.year, now.month,
+                                  now.day, fromhour ?? 0, 0)),
+                          convertStreamResultToDateTimeRanges:
+                          convertStreamResultMock,
+                          getBookingStream: getBookingStreamMock,
+                          uploadBooking: uploadBookingMock,
+                          pauseSlots: generatePauseSlots(),
+                          pauseSlotText: 'LUNCH',
+                          hideBreakTime: false,
+                          loadingWidget: const Text('Fetching data...'),
+                          uploadingWidget: Center(
+                              child: CircularProgressIndicator.adaptive()),
+                          locale: 'en',
+                          startingDayOfWeek: StartingDayOfWeek.saturday,
+                          wholeDayIsBookedWidget: const Text(
+                              'Sorry, for this day everything is booked'),
+                          disabledDays: numbers ?? [],
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text('Error loading data'));
+                  } else {
+                    return const Center(child: Text('No data available'));
+                  }
+                },
+              );
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Error loading data'));
+            } else {
+              return const Center(child: Text('No data available'));
+            }
           }),
     );
   }

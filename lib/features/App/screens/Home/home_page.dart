@@ -125,7 +125,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   StreamBuilder<QuerySnapshot>(
                     stream: _controller.getDoctorListStream(),
-                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(
                           child: CircularProgressIndicator(),
@@ -134,9 +135,10 @@ class _HomePageState extends State<HomePage> {
                         return Center(
                           child: Text('Error: ${snapshot.error}'),
                         );
-                      } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      } else if (!snapshot.hasData ||
+                          snapshot.data!.docs.isEmpty) {
                         return Center(
-                          child: Text('No Data Available'),
+                          child: Text('No Doctors Available !'),
                         );
                       } else {
                         var data = snapshot.data?.docs;
@@ -144,7 +146,8 @@ class _HomePageState extends State<HomePage> {
                           height: MediaQuery.of(context).size.height,
                           child: GridView.builder(
                             shrinkWrap: true,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: TSizes.gridViewSpacing,
                               crossAxisSpacing: TSizes.gridViewSpacing,
@@ -159,12 +162,15 @@ class _HomePageState extends State<HomePage> {
                                 docId: doctorData['docId'],
                                 title: 'Dr.${doctorData['docName']}',
                                 subtitle: doctorData['docCategory'],
-                                image:   'assets/images/doctors/doctor_1.jpg',
+                                image: doctorData['docimage'] != ''
+                                    ? NetworkImage(doctorData['docimage'])
+                                    : AssetImage('assets/images/doctors/doctor_1.jpg')
+                                as ImageProvider,
                                 isFavorite: doctorData['isFavorite'] ?? false,
                                 onTap: () {
                                   Get.to(() => DoctorProfileView(
-                                    doc: doctorData,
-                                  ));
+                                        doc: doctorData,
+                                      ));
                                 },
                               );
                             },
@@ -189,6 +195,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
 class ChatBotScreen extends StatefulWidget {
   @override
   State<ChatBotScreen> createState() => _ChatBotScreenState();

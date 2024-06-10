@@ -38,7 +38,10 @@ class HomeAppBar extends StatelessWidget {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(snapshot.data!['image']),
+                backgroundImage: userData['image'] != ''
+                    ? NetworkImage(userData['image'])
+                    : AssetImage('assets/images/profile.png')
+                as ImageProvider,
               ),
               // IconButton(
               //   onPressed: () {},

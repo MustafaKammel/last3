@@ -52,7 +52,10 @@ class _SearchViewState extends State<SearchView> {
                           .contains(widget.searchQuery.toLowerCase())
                       ? const SizedBox.shrink()
                       : DoctorCardVertical(
-                          image: doctor,
+                          image: doc['docimage'] != ''
+                              ? NetworkImage(doc['docimage'])
+                              : AssetImage('assets/images/doctors/doctor_1.jpg')
+                          as ImageProvider,
                           subtitle: doc['docCategory'],
                           title: doc['docName'],
                           onTap: () {

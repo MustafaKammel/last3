@@ -45,6 +45,10 @@ dependencies:
   animated_text_kit: ^4.2.1
   google_maps_flutter: ^2.1.2
   geolocator: ^12.0.0
+  flutter_rating_bar: ^4.0.0
+  flutter_sound: ^9.1.5+1
+  permission_handler: ^10.0.0
+
   #  flutter_native_splash: ^2.4.0
   flutter:
     sdk: flutter

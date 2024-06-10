@@ -48,7 +48,7 @@ class Chat_Card extends StatelessWidget {
                   ? FullScreenWidget(
                 disposeLevel: DisposeLevel.High,
                 child: const CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/doctor.jpg"),
+                  backgroundImage: AssetImage('assets/images/profile.png'),
                 ),
               )
                   : FullScreenWidget(

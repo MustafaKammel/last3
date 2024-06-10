@@ -91,7 +91,10 @@ class FavoriteScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       var doc = data[index];
                       return DoctorCardVertical(
-                        image: 'assets/images/doctors/doctor_1.jpg',
+                        image: doc['docimage'] != ''
+                            ? NetworkImage(doc['docimage'])
+                            : AssetImage('assets/images/doctors/doctor_1.jpg')
+                        as ImageProvider,
                         subtitle: doc['docCategory'],
                         title: doc['docName'],
                         onTap: () {

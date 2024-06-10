@@ -57,12 +57,12 @@ class ProfileScreen extends StatelessWidget {
                         onTap: () {
                           _showFullScreenImage(context, userData[role == 'doctor' ?'docimage' : 'image']);
                         },
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(snapshot.data![role == 'doctor' ?'docimage' : 'image']),
-                          ),
+                        child: CircleAvatar(
+                          backgroundImage: userData['image'] != ''
+                              ? NetworkImage(userData['image'])
+                              : AssetImage('assets/images/profile.png')
+                          as ImageProvider,
+                          radius: 80,
                         ),
                       ),
                       TextButton(

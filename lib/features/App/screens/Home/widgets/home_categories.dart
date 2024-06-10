@@ -66,14 +66,14 @@ class AllSpecialtiesView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     List specialties = [
-      {"name": "Cardiology", "icon": "assets/icons/spicialists/heart.png"},
+      {"name": "Cardiolo", "icon": "assets/icons/spicialists/heart.png"},
       {"name": "Ophthalmology", "icon": "assets/icons/spicialists/eye.png"},
-      {"name": "Pulmonology", "icon": "assets/icons/spicialists/lungs.png"},
+      {"name": "pulmonology", "icon": "assets/icons/spicialists/lungs.png"},
       {"name": "Dentist", "icon": "assets/icons/spicialists/tooth.png"},
       {"name": "Neurology", "icon": "assets/icons/spicialists/brain.png"},
       {"name": "Orthopedic", "icon": "assets/icons/spicialists/bones.png"},
       {"name": "Nephrology", "icon": "assets/icons/spicialists/kidney.png"},
-      {"name": "Otolaryngology", "icon": "assets/icons/spicialists/ear.png"},
+      {"name": "Otolaryngolgy", "icon": "assets/icons/spicialists/ear.png"},
     ];
 
     return Scaffold(

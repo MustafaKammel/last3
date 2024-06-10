@@ -77,7 +77,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CircleAvatar(
-                          backgroundImage: docData['docimage'] != null
+                          backgroundImage: docData['docimage'] != ''
                               ? NetworkImage(docData['docimage'])
                               : AssetImage('assets/images/doctors/doctor_1.jpg')
                                   as ImageProvider,
@@ -284,7 +284,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(15),
         height: 130,
-        decoration: const BoxDecoration(color: MColors.white, boxShadow: [
+        decoration:  BoxDecoration(color: dark ? Colors.black :MColors.white , boxShadow: [
           BoxShadow(color: Colors.black12, blurRadius: 4, spreadRadius: 2),
         ]),
         child: Column(
@@ -292,10 +292,10 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                 Text(
                   "Consultation price",
                   style: TextStyle(
-                    color: Colors.black54,
+                    color: dark ?Colors.white:Colors.black54,
                   ),
                 ),
                 Text(
@@ -324,9 +324,9 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                         Services: widget.doc['docService'],
                       ));
                 },
-                child: const Text(
+                child:  Text(
                   TTexts.bookAppointment,
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: dark ?Colors.white:Colors.black),
                 ),
               ),
             ),

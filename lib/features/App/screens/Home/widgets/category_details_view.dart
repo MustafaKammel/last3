@@ -42,7 +42,7 @@ class _CategoryDetailsViewState extends State<CategoryDetailsView> {
               child: CircularProgressIndicator(),
             );
           } else {
-            var data = snapshot.data?.docs;
+            var data = snapshot.data?.docs ?? [];
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: GridView.builder(
@@ -54,8 +54,12 @@ class _CategoryDetailsViewState extends State<CategoryDetailsView> {
                 ),
                 itemCount: data?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
+                  var doc = data[index];
                   return DoctorCardVertical(
-                    image: doctor,
+                    image: doc['docimage'] != ''
+                        ? NetworkImage(doc['docimage'])
+                        : AssetImage('assets/images/doctors/doctor_1.jpg')
+                    as ImageProvider,
                     subtitle: data![index]['docCategory'],
                     title: 'Dr.${data[index]['docName']}',
                     onTap: () {

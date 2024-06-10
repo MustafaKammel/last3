@@ -14,7 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DoctorCardVertical extends StatefulWidget {
-  const DoctorCardVertical({
+  DoctorCardVertical({
     Key? key,
     required this.docId,
     required this.title,
@@ -25,7 +25,7 @@ class DoctorCardVertical extends StatefulWidget {
   }) : super(key: key);
 
   final String docId;
-  final String title, subtitle, image;
+  var title, subtitle, image;
   final bool isFavorite;
   final void Function()? onTap;
 
@@ -87,13 +87,17 @@ class _DoctorCardVerticalState extends State<DoctorCardVertical> {
               backGroundColor: dark ? MColors.dark : MColors.grey,
               child: Stack(
                 children: [
-                  RoundedImage(
-                    imagUrl: widget.image,
-                    applyImageRadius: true,
-                    fit: BoxFit.fill,
-                    height: 100,
-                    width: double.infinity,
+                  CircleAvatar(
+                    backgroundImage: widget.image,
+                    radius: 40,
                   ),
+                  // RoundedImage(
+                  //   imagUrl: widget.image,
+                  //   applyImageRadius: true,
+                  //   fit: BoxFit.fill,
+                  //   height: 100,
+                  //   width: double.infinity,
+                  // ),
                   Positioned(
                     top: 8,
                     right: 8,
@@ -156,7 +160,7 @@ class _DoctorCardVerticalState extends State<DoctorCardVertical> {
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(TSizes.cardRadiusMd),
                             bottomRight:
-                            Radius.circular(TSizes.productImageRadius),
+                                Radius.circular(TSizes.productImageRadius),
                           ),
                         ),
                         child: IconButton(

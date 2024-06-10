@@ -194,9 +194,11 @@ class _DocSettingsState extends State<Doc_Settings> {
                   Stack(
                     children: [
                       CircleAvatar(
-                        radius: 60,
-                        backgroundImage: NetworkImage(snapshot
-                            .data![role == 'doctor' ? 'docimage' : 'docimage']),
+                        radius: 80,
+                        backgroundImage: snapshot.data!['docimage'] != ''
+                            ? NetworkImage(snapshot.data!['docimage'])
+                            : AssetImage('assets/images/doctors/doctor_1.jpg')
+                        as ImageProvider,
                       ),
                       Positioned(
                         bottom: 0,
@@ -266,7 +268,7 @@ class _DocSettingsState extends State<Doc_Settings> {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    width: 200,
+                    width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _updateData,
                       child: const Text('Update Profile'),

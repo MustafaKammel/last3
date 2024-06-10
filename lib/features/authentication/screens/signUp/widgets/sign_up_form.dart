@@ -31,7 +31,8 @@ class _SignUpFormState extends State<SignUpForm> {
       DateFormat('HH:mm:ss').format(DateTime.now().add(Duration(minutes: 15)));
 
   var controller = Get.put(AuthController());
-  LatLng? _selectedLocation;
+
+  // LatLng? _selectedLocation;
   List<String> categoryList = [
     "Cardiolo", //أمراض القلب
     "Ophthalmology", //طب العيون
@@ -417,8 +418,8 @@ class _SignUpFormState extends State<SignUpForm> {
                           _startDate, _endDate)) {
                         throw Exception(
                             "End time must be at least 15 minutes after start time");
-                      } else if (_selectedLocation == null) {
-                        throw Exception("Please select a location on the map.");
+                        // } else if (_selectedLocation == null) {
+                        //   throw Exception("Please select a location on the map.");
                       } else {
                         controller.signupUser(isDoctor, _selectedDays);
                       }

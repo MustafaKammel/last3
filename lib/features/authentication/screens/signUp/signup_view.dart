@@ -34,10 +34,10 @@ class _SignUpViewState extends State<SignUpView> {
               const SignUpForm(),
               const SizedBox(height: TSizes.spaceBtwItems),
               // Form Divider
-              FormDivider(dividerText: TTexts.orSignUpWith.capitalize!),
-              const SizedBox(height: TSizes.spaceBtwItems),
+              // FormDivider(dividerText: TTexts.orSignUpWith.capitalize!),
+              // const SizedBox(height: TSizes.spaceBtwItems),
               // Social Buttons
-              const SocialButtons(),
+              // const SocialButtons(),
 
 
             ],

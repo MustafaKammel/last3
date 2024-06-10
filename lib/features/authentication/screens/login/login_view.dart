@@ -43,12 +43,12 @@ class _LoginViewState extends State<LoginView> {
                     const LoginForm(),
 
                     //Divider
-                    FormDivider(dividerText: TTexts.orSignInWith.capitalize!),
-
-                    const SizedBox(height: TSizes.spaceBtwItems),
+                    // FormDivider(dividerText: TTexts.orSignInWith.capitalize!),
+                    //
+                    // const SizedBox(height: TSizes.spaceBtwItems),
 
                     //Footer
-                    const SocialButtons(),
+                    // const SocialButtons(),
                   ],
                 ),
               ),
